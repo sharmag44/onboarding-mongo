@@ -2,12 +2,8 @@
 const db = require('../models')
 const jwt = require('../helpers/jwt')
 
-const include = [{ 
-    model: db.user, 
-    include: [{ 
-        model: db.role
-    }]
-}]
+const populate = [{ path: "user" }]
+
 
 exports.create = async (user) => {
     let entity = new db.session({
@@ -20,10 +16,5 @@ exports.create = async (user) => {
 }
 
 exports.get = async (id) => {
-    return await db.session.findOne({
-        where: {
-            id: id 
-        }, 
-        include : include
-    })
+    return await db.session.findById(id)
 }

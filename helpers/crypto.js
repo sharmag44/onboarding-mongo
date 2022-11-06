@@ -6,6 +6,6 @@ exports.setPassword = async (password) => {
     return bcrypt.hashSync(password, salt);
 }
 
-exports.comparePassword = (password, hash) => {
+exports.comparePassword = async (password, hash) => {
     return bcrypt.compareSync(password, hash);
 }

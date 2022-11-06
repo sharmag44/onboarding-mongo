@@ -3,7 +3,7 @@ var _ = require('underscore');
 var responseHelper = require('./response');
 var logger = require('./logger')();
 
-var responseDecoratorFn = function(req, res, next) {
+var responseDecoratorFn = function (req, res, next) {
     res.log = logger.start(req.method + ' ' + req.url);
     if (req.body) {
         res.log.debug(req.body);
@@ -18,12 +18,12 @@ var responseDecoratorFn = function(req, res, next) {
 };
 
 
-module.exports = function(app) {
+module.exports = function (app) {
 
     let apiRoot, requiredModule;
     var tasks = [];
 
-    let register = function(option, filters) {
+    let register = function (option, filters) {
 
         if (_.isEmpty(requiredModule)) {
             return;
@@ -31,12 +31,12 @@ module.exports = function(app) {
 
         tasks.push(responseDecoratorFn);
 
-        if (typeof(option) === "string" && option.toUpperCase() === 'REST' ||
-            typeof(option) === "string" && option.toUpperCase() === 'CRUD') {
+        if (typeof (option) === "string" && option.toUpperCase() === 'REST' ||
+            typeof (option) === "string" && option.toUpperCase() === 'CRUD') {
             if (filters) {
                 tasks.push(filters);
             }
-            (function() {
+            (function () {
                 let apiUrl = apiRoot + '/:id';
 
                 if (requiredModule.get) {
@@ -68,7 +68,7 @@ module.exports = function(app) {
             })();
         }
 
-        if (typeof(option) === "object" && !filters) { //come as array or object
+        if (typeof (option) === "object" && !filters) { //come as array or object
             var options = [];
 
             if (option[0]) {
@@ -77,7 +77,7 @@ module.exports = function(app) {
                 options.push(option);
             }
 
-            options.forEach(function(item) {
+            options.forEach(function (item) {
                 let filters = [];
 
                 filters = item.filters ? item.filters : [];
@@ -102,7 +102,7 @@ module.exports = function(app) {
                         app.post(apiUrl, tasks);
                         tasks.splice(1, filters.length + 1);
                         break;
-                 
+
                     case "PUT":
                         app.put(apiUrl, tasks);
                         tasks.splice(1, filters.length + 1);
@@ -125,7 +125,7 @@ module.exports = function(app) {
     };
 
     return {
-        model: function(apiType) {
+        work: function (apiType) {
 
             if (apiType.charAt(apiType.length - 1) !== 's' &&
                 apiType.substr(apiType.length - 2, apiType.length) !== 'es') {

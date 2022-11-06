@@ -3,7 +3,6 @@ let auth = require('../middlewares/auth');
 
 const crypto = require('../helpers/crypto');
 const jwt = require('../helpers/jwt');
-
 const sessionService = require('../services/sessions');
 const authService = require('../services/auth');
 const userService = require('../services/users');
@@ -94,7 +93,7 @@ exports.verification = async (req, res) => {
             if (req.body.activationCode != user.activationCode) {
                   if (req.body.activationCode != '4444') {
                         return res.failure(
-                              'OTP is invalid. Plesae enter correct OTP'
+                              'OTP is invalid. Please enter correct OTP'
                         );
                   }
             }

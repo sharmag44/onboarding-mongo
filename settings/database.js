@@ -24,7 +24,7 @@ module.exports.configure = () => {
      });
 
      db.on('error', function (err) {
-          console.logr('connection error: ' + err);
+          console.log('connection error: ' + err);
      });
 
      db.on('disconnected', function () {

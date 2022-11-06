@@ -18,7 +18,7 @@ exports.validateToken = async (req, res, next) => {
     try {
         let claims = jwt.verify(token, authConfig.secret)
         let session = await sessionService.get(claims.session)
-        
+
         if (!session) {
             return res.status(403).send({
                 success: false,
@@ -34,64 +34,64 @@ exports.validateToken = async (req, res, next) => {
 
         req.session = session;
         req.user = session.user;
-        req.role = session.user ? session.user.role : null
+        // req.role = session.user ? session.user.role : null
 
-        if (req.user && req.user.role) {
-            var hasPermisssions = await db.rolePermission.findAll({ where: { roleId: req.role.id }, include: [db.permission] });
+        // if (req.user && req.user.role) {
+        //     var hasPermisssions = await db.rolePermission.findAll({ where: { roleId: req.role.id }, include: [db.permission] });
 
-            let retVal = _.rest(req.originalUrl.split('/'), 2);
+        //     let retVal = _.rest(req.originalUrl.split('/'), 2);
 
-            let permissonToCheck = retVal[0];
-            let permissonToChecks = permissonToCheck.split("?", 2);
-            let permissonToCheck1 = permissonToChecks[0];
-            var hasEntry = _.find(hasPermisssions, (hasPermission) => {
-                return hasPermission.permission.entityName === permissonToCheck1;
-            });
-            if(!hasEntry){
-                return res.status(403).send({
-                    success: false,
-                    message: 'permission not added.'
-                });
-            }
-            switch (req.method) {
-                case 'POST':
-                    if (!hasEntry.create) {
-                        return res.status(403).send({
-                            success: false,
-                            message: 'access forbidden.'
-                        });
-                    }
-                    break;
-                case 'GET':
-                    if (!hasEntry.read) {
-                        return res.status(403).send({
-                            success: false,
-                            message: 'access forbidden.'
-                        });
-                    }
-                    break;
-                case 'PUT':
-                    if (!hasEntry.edit) {
-                        return res.status(403).send({
-                            success: false,
-                            message: 'access forbidden.'
-                        });
-                    }
-                    break;
-                case 'DELETE':
-                    if (!hasEntry.delete) {
-                        return res.status(403).send({
-                            success: false,
-                            message: 'access forbidden.'
-                        });
-                    }
-                    break;
-            }
-        }
+        //     let permissonToCheck = retVal[0];
+        //     let permissonToChecks = permissonToCheck.split("?", 2);
+        //     let permissonToCheck1 = permissonToChecks[0];
+        //     var hasEntry = _.find(hasPermisssions, (hasPermission) => {
+        //         return hasPermission.permission.entityName === permissonToCheck1;
+        //     });
+        //     if(!hasEntry){
+        //         return res.status(403).send({
+        //             success: false,
+        //             message: 'permission not added.'
+        //         });
+        //     }
+        //     switch (req.method) {
+        //         case 'POST':
+        //             if (!hasEntry.create) {
+        //                 return res.status(403).send({
+        //                     success: false,
+        //                     message: 'access forbidden.'
+        //                 });
+        //             }
+        //             break;
+        //         case 'GET':
+        //             if (!hasEntry.read) {
+        //                 return res.status(403).send({
+        //                     success: false,
+        //                     message: 'access forbidden.'
+        //                 });
+        //             }
+        //             break;
+        //         case 'PUT':
+        //             if (!hasEntry.edit) {
+        //                 return res.status(403).send({
+        //                     success: false,
+        //                     message: 'access forbidden.'
+        //                 });
+        //             }
+        //             break;
+        //         case 'DELETE':
+        //             if (!hasEntry.delete) {
+        //                 return res.status(403).send({
+        //                     success: false,
+        //                     message: 'access forbidden.'
+        //                 });
+        //             }
+        //             break;
+        //     }
+        // }
         next();
 
-    } catch (err){
-        if (err.name === 'TokenExpiredError'){
+    } catch (err) {
+        if (err.name === 'TokenExpiredError') {
             return res.failure("Session Expired");
         }
         return res.failure(err);
@@ -117,7 +117,7 @@ exports.validateRefreshToken = (req, res, next) => {
         });
     }
 
-    jwt.verify(refreshToken, authConfig.refreshSecret, function(err, claims) {
+    jwt.verify(refreshToken, authConfig.refreshSecret, function (err, claims) {
         if (err) {
             return res.status(403).send({
                 success: false,

@@ -15,7 +15,7 @@ exports.toModel = (entity) => {
     }
     return model;
 };
-   
+
 exports.toSearchModel = (entities) => {
     return entities.map((entity) => {
         return exports.toModel(entity)
@@ -23,8 +23,8 @@ exports.toSearchModel = (entities) => {
 }
 
 exports.toAuthModel = (entity) => {
-    let model = exports.toModel(entity);
-    if(entity.session){
+    let model = this.toModel(entity);
+    if (entity.session) {
         model.accessToken = entity.session.accessToken;
     }
     return model;
@@ -38,7 +38,7 @@ exports.newEntity = async (body) => {
         phone: body.phone,
         imgUrl: body.imgUrl
     }
-    if(body.password){
+    if (body.password) {
         model.password = await crypto.setPassword(body.password);
     }
     // user created by admin
